@@ -1,0 +1,68 @@
+import React from "react";
+
+import axios from "axios";
+
+export default class PostList extends React.Component {
+  state = {
+    photos: [],
+  };
+
+  componentDidMount() {
+    axios
+      .get(`https://60ff90a3bca46600171cf36d.mockapi.io/api/products`)
+      .then((res) => {
+        const photos = res.data;
+        this.setState({ photos });
+      });
+  }
+
+  deleteRow(id, e) {
+    axios
+      .delete(`https://60ff90a3bca46600171cf36d.mockapi.io/api/products/${id}`)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        const photos = this.state.photos.filter((item) => item.id !== id);
+        this.setState({ photos });
+      });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1> Example of React Axios Delete Request </h1>
+
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {this.state.photos.map((photo) => (
+              <tr>
+                <td>{photo.id}</td>
+                <td style={{ textAlign: "center" }}>{photo.name}</td>
+                <td>
+                  <img src={photo.image} />
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={(e) => this.deleteRow(photo.id, e)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
