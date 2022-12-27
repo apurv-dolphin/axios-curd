@@ -13,7 +13,6 @@ export default function Update() {
     e.preventDefault();
     const datas = { firstName, email, file };
     sendDataToAPIupdate(datas, ID);
-
     navigate("/read");
   };
 

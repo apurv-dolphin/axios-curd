@@ -22,7 +22,19 @@ export default function Create() {
     setFileName(e.target.files[0].name);
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
-      setFile(URL.createObjectURL(img));
+      try {
+        const objectURL = window.URL.createObjectURL(img);
+        setFile(objectURL);
+
+      } catch (error) {
+        try {
+          var fileReader = new FileReader();
+          fileReader.onload = (e) => (e.target.result);
+          setFile(fileReader.readAsDataURL(img));
+        } catch (e) {
+          console.log(`File Upload not supported: ${e}`);
+        }
+      }
     }
   };
 
